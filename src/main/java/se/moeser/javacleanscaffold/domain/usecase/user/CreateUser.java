@@ -17,7 +17,7 @@ public final class CreateUser {
        this.repository = repository;
     }
 
-    public void createUser(UserDtoInterface dto) throws InvalidEmailException, InvalidUsernameException, InvalidPasswordException {
+    public long createUser(UserDtoInterface dto) throws InvalidEmailException, InvalidUsernameException, InvalidPasswordException {
 
         Email email = new Email(dto.getEmail());
         Username username = new Username(dto.getUsername());
@@ -25,6 +25,6 @@ public final class CreateUser {
 
         User user = new User(-1, email, username, password);
 
-        this.repository.createUser(user);
+        return this.repository.createUser(user);
     }
 }

@@ -1,11 +1,9 @@
-package se.moeser.javacleanscaffold.domain.usecase.user;
+package se.moeser.javacleanscaffold.application.usecase.user;
 
-import se.moeser.javacleanscaffold.domain.dto.UserDtoInterface;
 import se.moeser.javacleanscaffold.domain.entity.User;
 import se.moeser.javacleanscaffold.domain.exception.InvalidEmailException;
 import se.moeser.javacleanscaffold.domain.exception.InvalidPasswordException;
 import se.moeser.javacleanscaffold.domain.exception.InvalidUsernameException;
-import se.moeser.javacleanscaffold.domain.repository.UserRepositoryInterface;
 import se.moeser.javacleanscaffold.domain.valueobject.Email;
 import se.moeser.javacleanscaffold.domain.valueobject.Password;
 import se.moeser.javacleanscaffold.domain.valueobject.Username;

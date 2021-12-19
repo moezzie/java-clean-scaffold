@@ -1,4 +1,4 @@
-package se.moeser.javacleanscaffold.domain.dto;
+package se.moeser.javacleanscaffold.application.usecase.user;
 
 public interface UserDtoInterface {
 

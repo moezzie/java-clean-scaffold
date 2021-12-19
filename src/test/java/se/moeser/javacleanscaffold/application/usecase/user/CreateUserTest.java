@@ -1,4 +1,4 @@
-package se.moeser.javacleanscaffold.domain.usecase.user;
+package se.moeser.javacleanscaffold.application.usecase.user;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -6,13 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import se.moeser.javacleanscaffold.domain.dto.UserDtoInterface;
 import se.moeser.javacleanscaffold.domain.entity.User;
 import se.moeser.javacleanscaffold.domain.exception.InvalidEmailException;
 import se.moeser.javacleanscaffold.domain.exception.InvalidPasswordException;
 import se.moeser.javacleanscaffold.domain.exception.InvalidUsernameException;
-import se.moeser.javacleanscaffold.domain.repository.UserRepositoryInterface;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;

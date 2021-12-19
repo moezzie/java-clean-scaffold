@@ -1,4 +1,4 @@
-package se.moeser.javacleanscaffold.domain.repository;
+package se.moeser.javacleanscaffold.application.usecase.user;
 
 import se.moeser.javacleanscaffold.domain.entity.User;
 

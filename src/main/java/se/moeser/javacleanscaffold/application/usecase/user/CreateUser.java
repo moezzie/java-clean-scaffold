@@ -8,7 +8,7 @@ import se.moeser.javacleanscaffold.domain.valueobject.Email;
 import se.moeser.javacleanscaffold.domain.valueobject.Password;
 import se.moeser.javacleanscaffold.domain.valueobject.Username;
 
-public final class CreateUser {
+public class CreateUser {
     private UserRepositoryInterface repository;
 
     public CreateUser(UserRepositoryInterface repository) {

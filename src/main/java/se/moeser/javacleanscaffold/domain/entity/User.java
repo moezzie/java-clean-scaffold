@@ -1,17 +1,18 @@
 package se.moeser.javacleanscaffold.domain.entity;
 
 import se.moeser.javacleanscaffold.domain.valueobject.Email;
+import se.moeser.javacleanscaffold.domain.valueobject.Password;
 import se.moeser.javacleanscaffold.domain.valueobject.Username;
 
 public class User {
 
-    private String id;
+    private long id;
     private Email email;
     private Username username;
-    private String password;
+    private Password password;
 
 
-    public User(String id, Email email, Username username, String password) {
+    public User(long id, Email email, Username username, Password password) {
         this.id = id;
         this.email = email;
         this.username = username;
@@ -20,11 +21,11 @@ public class User {
 
     public User() {}
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -44,11 +45,11 @@ public class User {
         this.username = username;
     }
 
-    public String getPassword() {
+    public Password getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(Password password) {
         this.password = password;
     }
 }

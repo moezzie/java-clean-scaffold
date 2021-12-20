@@ -10,7 +10,7 @@
     </parent>
     <groupId>se.moeser</groupId>
     <artifactId>java-clean-scaffold</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>java-clean-scaffold</name>
     <description>java-clean-scaffold</description>
     <properties>

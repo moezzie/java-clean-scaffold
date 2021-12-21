@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUser;
+import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserRequestInterface;
 import se.moeser.javacleanscaffold.domain.entity.User;
 import se.moeser.javacleanscaffold.domain.exception.InvalidEmailException;
 import se.moeser.javacleanscaffold.domain.exception.InvalidPasswordException;
@@ -19,7 +21,7 @@ import static org.mockito.Mockito.when;
 public class CreateUserTest {
 
     @Mock
-    private UserDtoInterface userDto;
+    private CreateUserRequestInterface userDto;
 
     @Mock
     private UserRepositoryInterface userRepository;

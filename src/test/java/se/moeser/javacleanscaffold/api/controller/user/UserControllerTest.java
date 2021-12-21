@@ -11,11 +11,13 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import se.moeser.javacleanscaffold.application.usecase.user.CreateUser;
+import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUser;
+import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserResponse;
+import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserResponseInterface;
 import se.moeser.javacleanscaffold.domain.exception.InvalidEmailException;
 import se.moeser.javacleanscaffold.domain.exception.InvalidPasswordException;
 import se.moeser.javacleanscaffold.domain.exception.InvalidUsernameException;
-import se.moeser.javacleanscaffold.infrastructure.dto.user.CreateUserDto;
+import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserRequest;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -38,21 +40,23 @@ public class UserControllerTest {
     public void setup() throws InvalidPasswordException, InvalidUsernameException, InvalidEmailException {
         this.restTemplate = new TestRestTemplate();
 
-        when(createUserUsecase.createUser(any())).thenReturn((long)1);
+        CreateUserResponseInterface response = new CreateUserResponse((long) 1);
+        when(createUserUsecase.createUser(any())).thenReturn(response);
     }
 
     @Test
     public void testCreateUser() {
         String ENDPOINT = this.domain + ":" + this.port + "/user";
 
-        CreateUserDto dto = new CreateUserDto("user1@email.com", "user1", "Password1!");
+        CreateUserRequest dto = new CreateUserRequest("user1@email.com", "user1", "Password1!");
         HttpEntity body = new HttpEntity(dto);
 
-        ResponseEntity<Long> response = restTemplate.postForEntity(ENDPOINT, body, Long.class);
+        ResponseEntity<CreateUserResponse> response = restTemplate.postForEntity(ENDPOINT, body, CreateUserResponse.class);
 
-        Assertions.assertEquals(200, response.getStatusCodeValue());
-        Assertions.assertEquals(response.getBody(), (long) 0);
+        int expectedStatus = 200;
+        Assertions.assertEquals(expectedStatus, response.getStatusCodeValue());
+
+        long expectedId = 1;
+        Assertions.assertEquals(expectedId, response.getBody().getId());
     }
-
-
 }

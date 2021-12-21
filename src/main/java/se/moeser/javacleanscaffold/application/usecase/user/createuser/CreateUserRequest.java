@@ -1,13 +1,13 @@
-package se.moeser.javacleanscaffold.infrastructure.dto.user;
+package se.moeser.javacleanscaffold.application.usecase.user.createuser;
 
-import se.moeser.javacleanscaffold.application.usecase.user.UserDtoInterface;
+import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserRequestInterface;
 
-public class CreateUserDto implements UserDtoInterface {
+public class CreateUserRequest implements CreateUserRequestInterface {
     private String email;
     private String username;
     private String password;
 
-    public CreateUserDto(String email, String username, String password) {
+    public CreateUserRequest(String email, String username, String password) {
         this.email = email;
         this.username = username;
         this.password = password;

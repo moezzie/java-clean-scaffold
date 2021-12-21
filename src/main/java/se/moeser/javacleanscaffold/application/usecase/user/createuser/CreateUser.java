@@ -1,5 +1,6 @@
-package se.moeser.javacleanscaffold.application.usecase.user;
+package se.moeser.javacleanscaffold.application.usecase.user.createuser;
 
+import se.moeser.javacleanscaffold.application.usecase.user.UserRepositoryInterface;
 import se.moeser.javacleanscaffold.domain.entity.User;
 import se.moeser.javacleanscaffold.domain.exception.InvalidEmailException;
 import se.moeser.javacleanscaffold.domain.exception.InvalidPasswordException;
@@ -7,6 +8,7 @@ import se.moeser.javacleanscaffold.domain.exception.InvalidUsernameException;
 import se.moeser.javacleanscaffold.domain.valueobject.Email;
 import se.moeser.javacleanscaffold.domain.valueobject.Password;
 import se.moeser.javacleanscaffold.domain.valueobject.Username;
+import se.moeser.javacleanscaffold.infrastructure.persistence.dao.UserDao;
 
 public class CreateUser {
     private UserRepositoryInterface repository;
@@ -15,7 +17,7 @@ public class CreateUser {
        this.repository = repository;
     }
 
-    public long createUser(UserDtoInterface dto) throws InvalidEmailException, InvalidUsernameException, InvalidPasswordException {
+    public CreateUserResponseInterface createUser(CreateUserRequestInterface dto) throws InvalidEmailException, InvalidUsernameException, InvalidPasswordException {
 
         Email email = new Email(dto.getEmail());
         Username username = new Username(dto.getUsername());
@@ -23,6 +25,8 @@ public class CreateUser {
 
         User user = new User(-1, email, username, password);
 
-        return this.repository.createUser(user);
+        long userId =  this.repository.createUser(user);
+
+        return new CreateUserResponse(userId);
     }
 }

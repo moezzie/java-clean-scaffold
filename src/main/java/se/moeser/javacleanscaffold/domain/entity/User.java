@@ -11,12 +11,17 @@ public class User {
     private Username username;
     private Password password;
 
-
     public User(long id, Email email, Username username, Password password) {
         this.id = id;
         this.email = email;
         this.username = username;
         this.password = password;
+    }
+
+    public User(long id, Email email, Username username) {
+        this.id = id;
+        this.email = email;
+        this.username = username;
     }
 
     public User() {}

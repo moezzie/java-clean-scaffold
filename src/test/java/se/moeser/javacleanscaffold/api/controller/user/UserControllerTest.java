@@ -26,12 +26,8 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserControllerTest extends BaseControllerTest {
 
-    @Value("${tests.url.domain}")
-    private String domain;
-
     @Mock
     private CreateUser createUserUsecase;
-
 
     @BeforeEach
     public void setup() throws InvalidPasswordException, InvalidUsernameException, InvalidEmailException {

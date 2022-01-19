@@ -6,7 +6,7 @@ import se.moeser.javacleanscaffold.application.usecase.user.UserRepositoryInterf
 import se.moeser.javacleanscaffold.infrastructure.persistence.repository.UserRepository;
 
 @Configuration
-public class AppConfiguration {
+public class ApplicationConfiguration {
     @Bean
     public UserRepositoryInterface userRepositoryConfiguration() {
         return new UserRepository();

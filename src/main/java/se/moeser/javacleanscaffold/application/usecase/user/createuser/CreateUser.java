@@ -8,7 +8,6 @@ import se.moeser.javacleanscaffold.domain.exception.InvalidUsernameException;
 import se.moeser.javacleanscaffold.domain.valueobject.Email;
 import se.moeser.javacleanscaffold.domain.valueobject.Password;
 import se.moeser.javacleanscaffold.domain.valueobject.Username;
-import se.moeser.javacleanscaffold.infrastructure.persistence.dao.UserDao;
 
 public class CreateUser {
     private UserRepositoryInterface repository;

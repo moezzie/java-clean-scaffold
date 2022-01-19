@@ -1,7 +1,5 @@
 package se.moeser.javacleanscaffold.application.usecase.user.createuser;
 
-import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserResponseInterface;
-
 public class CreateUserResponse implements CreateUserResponseInterface {
     private long id;
 

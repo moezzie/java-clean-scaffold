@@ -1,5 +1,6 @@
 package se.moeser.javacleanscaffold.api.auth;
 
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -7,6 +8,8 @@ import org.springframework.stereotype.Service;
 import se.moeser.javacleanscaffold.application.usecase.user.authenticate.AuthenticateUser;
 import se.moeser.javacleanscaffold.application.usecase.user.authenticate.AuthenticateUserRequest;
 import se.moeser.javacleanscaffold.application.usecase.user.authenticate.AuthenticateUserResponseInterface;
+
+import java.util.ArrayList;
 
 
 @Service
@@ -29,7 +32,11 @@ public class ApiUserDetailsService implements UserDetailsService {
         try {
             user = this.useCase.authenticateUser(request);
         } catch (Exception e) {
-            throw new UsernameNotFoundException("Unable to log in");
+            // Do nothing
+        }
+
+        if (user == null) {
+            throw new UsernameNotFoundException("Incorrect username or password");
         }
 
         return new ApiUserPrincipal(user);

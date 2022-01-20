@@ -29,7 +29,7 @@ public class CreateUserTest {
 
     @BeforeEach
     void setMockOutput() {
-        when(userDto.getEmail()).thenReturn("user1@email.com");
+        when(userDto.getEmail()).thenReturn("user1@localhost.local");
         when(userDto.getUsername()).thenReturn("user1");
         lenient().when(userDto.getPassword()).thenReturn("Password1!");
 

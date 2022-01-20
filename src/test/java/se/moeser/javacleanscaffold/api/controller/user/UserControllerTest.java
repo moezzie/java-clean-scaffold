@@ -20,6 +20,7 @@ import se.moeser.javacleanscaffold.domain.exception.InvalidEmailException;
 import se.moeser.javacleanscaffold.domain.exception.InvalidPasswordException;
 import se.moeser.javacleanscaffold.domain.exception.InvalidUsernameException;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserRequest;
+import se.moeser.javacleanscaffold.helper.UserTestHelper;
 
 import java.io.IOException;
 
@@ -42,7 +43,7 @@ public class UserControllerTest extends BaseControllerTest {
     @Test
     public void testCreateUser() {
 
-        ResponseEntity<CreateUserResponse> response = this.createUser("user1@email.com", "user1", "Password1!");
+        ResponseEntity<CreateUserResponse> response = this.createUser("user1@localhost.local", "user1", "Password1!");
 
         int expectedStatus = 200;
         Assertions.assertEquals(expectedStatus, response.getStatusCodeValue());
@@ -52,7 +53,7 @@ public class UserControllerTest extends BaseControllerTest {
 
     @Test
     public void TestGetUser() throws JSONException, IOException, InterruptedException {
-        String email = "user2@email.com";
+        String email = "user2@localhost.local";
         String username = "user2";
         String password = "Password2!";
 
@@ -84,6 +85,7 @@ public class UserControllerTest extends BaseControllerTest {
 
         JSONObject expected = new JSONObject();
         expected.put("message", "User not found");
+        expected.put("status", "BAD_REQUEST");
 
         JSONAssert.assertEquals(actual, expected, true);
     }

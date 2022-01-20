@@ -10,6 +10,6 @@ public class AuthenticateUserRequest implements AuthenticateUserRequestInterface
 
     @Override
     public String getUsername() {
-        return null;
+        return this.username;
     }
 }

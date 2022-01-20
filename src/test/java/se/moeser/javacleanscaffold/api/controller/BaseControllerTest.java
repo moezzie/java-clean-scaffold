@@ -45,6 +45,7 @@ public abstract class BaseControllerTest {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(uri)
+                .header("Content-Type", "application/json; charset=UTF-8")
                 .build();
 
         return this.jsonRequest(request);
@@ -55,8 +56,11 @@ public abstract class BaseControllerTest {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(uri)
+                .header("Content-Type", "application/json; charset=UTF-8")
                 .POST(HttpRequest.BodyPublishers.ofString(data.toString()) )
                 .build();
+
+        String d = data.toString();
 
         return this.jsonRequest(request);
     }

@@ -1,8 +1,14 @@
 package se.moeser.javacleanscaffold.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import se.moeser.javacleanscaffold.api.auth.ApiUserDetailsService;
+import se.moeser.javacleanscaffold.api.auth.ApiUserPrincipal;
 import se.moeser.javacleanscaffold.api.exception.ApiException;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUser;
 import se.moeser.javacleanscaffold.application.usecase.user.UserRepositoryInterface;
@@ -15,6 +21,8 @@ import se.moeser.javacleanscaffold.domain.exception.InvalidUsernameException;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserRequest;
 import se.moeser.javacleanscaffold.infrastructure.persistence.exception.UserNotFoundException;
 
+import java.nio.file.attribute.UserPrincipal;
+import java.security.Principal;
 import java.util.Optional;
 
 @RestController
@@ -22,11 +30,13 @@ public class UserController {
 
     private final UserRepositoryInterface userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ApiUserDetailsService userDetailsService;
 
     @Autowired
-    public UserController(UserRepositoryInterface userRepository, PasswordEncoder passwordEncoder) {
+    public UserController(UserRepositoryInterface userRepository, PasswordEncoder passwordEncoder, ApiUserDetailsService userDetailsService ) {
        this.userRepository = userRepository;
        this.passwordEncoder = passwordEncoder;
+       this.userDetailsService = userDetailsService;
     }
 
     @PostMapping("/user")
@@ -40,7 +50,15 @@ public class UserController {
     }
 
     @GetMapping("/user/{id}")
-    public GetUserResponseInterface get(@PathVariable long id) throws InvalidUsernameException, InvalidEmailException, UserNotFoundException {
+    public GetUserResponseInterface get(@PathVariable long id, @AuthenticationPrincipal Principal principal) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        ApiUserPrincipal currentUser = authentication == null ? null : (ApiUserPrincipal) authentication.getPrincipal();
+
+        // Can only access own user
+        if (id != currentUser.getId()) {
+            throw new ApiException("Forbidden", HttpStatus.FORBIDDEN);
+        }
 
         Optional<GetUserResponseInterface> response;
 

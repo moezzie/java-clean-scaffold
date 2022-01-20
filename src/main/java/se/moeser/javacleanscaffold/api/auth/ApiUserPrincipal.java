@@ -32,6 +32,10 @@ public class ApiUserPrincipal implements UserDetails {
         return this.user.getUsername();
     }
 
+    public long getId() {
+        return this.user.getId();
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -51,4 +55,5 @@ public class ApiUserPrincipal implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }

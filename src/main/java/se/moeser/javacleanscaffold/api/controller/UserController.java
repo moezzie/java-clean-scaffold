@@ -1,7 +1,7 @@
 package se.moeser.javacleanscaffold.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import se.moeser.javacleanscaffold.api.exception.ApiException;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUser;
@@ -21,15 +21,21 @@ import java.util.Optional;
 public class UserController {
 
     private final UserRepositoryInterface userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserController(UserRepositoryInterface userRepository) {
+    public UserController(UserRepositoryInterface userRepository, PasswordEncoder passwordEncoder) {
        this.userRepository = userRepository;
+       this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/user")
     public CreateUserResponseInterface create(@RequestBody CreateUserRequest dto) throws InvalidPasswordException, InvalidUsernameException, InvalidEmailException {
         CreateUser usecase = new CreateUser(this.userRepository);
+
+        // Make sure to encrypt the users password
+        dto.setPassword(this.passwordEncoder.encode(dto.getPassword()));
+
         return usecase.createUser(dto);
     }
 

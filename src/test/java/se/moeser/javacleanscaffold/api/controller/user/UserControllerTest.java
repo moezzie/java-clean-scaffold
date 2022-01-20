@@ -62,14 +62,17 @@ public class UserControllerTest extends BaseControllerTest {
 
         String endpoint = "/user/" + createUserResponse.getBody().getId();
 
-        JSONObject actual = this.getRequest(endpoint);
-
         JSONObject expected = new JSONObject();
         expected.put("id", userId);
         expected.put("email",email);
         expected.put("username", username);
 
+        JSONObject actual = this.getRequest(endpoint);
+
         JSONAssert.assertEquals(expected, actual,true);
+
+        // Make sure output does not include the password
+        Assertions.assertFalse(actual.has("password"));
     }
 
     @Test

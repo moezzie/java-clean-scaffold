@@ -59,10 +59,7 @@ public class UserController {
     }
 
     @GetMapping("/user/{id}")
-    public GetUserResponseInterface get(@PathVariable long id, @AuthenticationPrincipal Principal principal) {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ApiUserPrincipal currentUser = authentication == null ? null : (ApiUserPrincipal) authentication.getPrincipal();
+    public GetUserResponseInterface get(@PathVariable long id, @AuthenticationPrincipal ApiUserPrincipal currentUser) {
 
         // Can only access own user
         if (id != currentUser.getId()) {

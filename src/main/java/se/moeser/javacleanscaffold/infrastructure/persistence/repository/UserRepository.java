@@ -42,7 +42,7 @@ public class UserRepository implements UserRepositoryInterface {
     }
 
     @Override
-    public User getUserByUsername(String username) throws InvalidUsernameException, InvalidEmailException, InvalidPasswordException {
+    public User getUserByUsernameOrEmail(String username) throws InvalidUsernameException, InvalidEmailException, InvalidPasswordException {
         Optional<UserDto> o = this.dao.findUserDtoByEmailOrUsername(username, username);
 
         if (o.isEmpty()) {
@@ -52,6 +52,27 @@ public class UserRepository implements UserRepositoryInterface {
         return this.dtoToEntity(o.get());
     }
 
+    @Override
+    public User getUserByUsername(String username) throws InvalidPasswordException, InvalidUsernameException, InvalidEmailException {
+        Optional<UserDto> o = this.dao.findUserDtoByUsername(username);
+
+        if (o.isEmpty()) {
+            return null;
+        }
+
+        return this.dtoToEntity(o.get());
+    }
+
+    @Override
+    public User getUserByEmail(String email) throws InvalidPasswordException, InvalidUsernameException, InvalidEmailException {
+        Optional<UserDto> o = this.dao.findUserDtoByEmail(email);
+
+        if (o.isEmpty()) {
+            return null;
+        }
+
+        return this.dtoToEntity(o.get());
+    }
 
     private User dtoToEntity(UserDto dto) throws InvalidUsernameException, InvalidEmailException, InvalidPasswordException {
         User user = new User();

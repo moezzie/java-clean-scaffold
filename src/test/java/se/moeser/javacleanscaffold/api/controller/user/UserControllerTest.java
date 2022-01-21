@@ -13,6 +13,9 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import se.moeser.javacleanscaffold.api.controller.BaseControllerTest;
+import se.moeser.javacleanscaffold.application.usecase.exception.EmailExistsException;
+import se.moeser.javacleanscaffold.application.usecase.exception.UseCaseException;
+import se.moeser.javacleanscaffold.application.usecase.exception.UsernameExistsException;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUser;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserResponse;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserResponseInterface;
@@ -36,7 +39,7 @@ public class UserControllerTest extends BaseControllerTest {
     private CreateUser createUserUsecase;
 
     @BeforeEach
-    public void setup() throws InvalidPasswordException, InvalidUsernameException, InvalidEmailException {
+    public void setup() throws InvalidPasswordException, InvalidUsernameException, InvalidEmailException, UseCaseException {
         CreateUserResponseInterface response = new CreateUserResponse((long) 1);
         when(createUserUsecase.createUser(any())).thenReturn(response);
     }
@@ -44,7 +47,7 @@ public class UserControllerTest extends BaseControllerTest {
     @Test
     public void testCreateUser() {
 
-        ResponseEntity<CreateUserResponse> response = this.createUser("user1@localhost.local", "user1", "Password1!");
+        ResponseEntity<CreateUserResponse> response = this.createUser("user10@localhost.local", "user10", "Password1!");
 
         int expectedStatus = 200;
         Assertions.assertEquals(expectedStatus, response.getStatusCodeValue());

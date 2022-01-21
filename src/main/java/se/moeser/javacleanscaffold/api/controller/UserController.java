@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import se.moeser.javacleanscaffold.api.auth.ApiUserDetailsService;
 import se.moeser.javacleanscaffold.api.auth.ApiUserPrincipal;
 import se.moeser.javacleanscaffold.api.exception.ApiException;
+import se.moeser.javacleanscaffold.application.usecase.exception.UseCaseException;
+import se.moeser.javacleanscaffold.application.usecase.exception.EmailExistsException;
+import se.moeser.javacleanscaffold.application.usecase.exception.UsernameExistsException;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUser;
 import se.moeser.javacleanscaffold.application.usecase.user.UserRepositoryInterface;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserResponseInterface;
@@ -21,7 +24,6 @@ import se.moeser.javacleanscaffold.domain.exception.InvalidUsernameException;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserRequest;
 import se.moeser.javacleanscaffold.infrastructure.persistence.exception.UserNotFoundException;
 
-import java.nio.file.attribute.UserPrincipal;
 import java.security.Principal;
 import java.util.Optional;
 
@@ -40,13 +42,20 @@ public class UserController {
     }
 
     @PostMapping("/user")
-    public CreateUserResponseInterface create(@RequestBody CreateUserRequest dto) throws InvalidPasswordException, InvalidUsernameException, InvalidEmailException {
+    public CreateUserResponseInterface create(@RequestBody CreateUserRequest dto) throws InvalidPasswordException, InvalidUsernameException, InvalidEmailException, UseCaseException {
         CreateUser usecase = new CreateUser(this.userRepository);
 
         // Make sure to encrypt the users password
         dto.setPassword(this.passwordEncoder.encode(dto.getPassword()));
 
-        return usecase.createUser(dto);
+        CreateUserResponseInterface response;
+        try {
+            response = usecase.createUser(dto);
+        } catch (UseCaseException e) {
+            throw new ApiException(e.getMessage(), e);
+        }
+
+        return response;
     }
 
     @GetMapping("/user/{id}")
@@ -65,8 +74,8 @@ public class UserController {
         try {
             GetUser useCase = new GetUser(this.userRepository);
             response = useCase.getUserById(id);
-        } catch (Throwable t) {
-            throw new ApiException("Unexpected error", t);
+        } catch (UserNotFoundException | InvalidPasswordException | InvalidUsernameException | InvalidEmailException e) {
+            throw new ApiException(e.getMessage(), e);
         }
 
         if (response.isEmpty()) {

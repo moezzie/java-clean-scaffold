@@ -16,7 +16,7 @@ public class AuthenticateUser {
 
     public AuthenticateUserResponseInterface authenticateUser(AuthenticateUserRequestInterface request) throws InvalidUsernameException, InvalidEmailException, InvalidPasswordException {
         String username = request.getUsername();
-        User user = this.repository.getUserByUsername(username);
+        User user = this.repository.getUserByUsernameOrEmail(username);
 
         // No matching user found
         if (user == null) {

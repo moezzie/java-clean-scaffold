@@ -1,4 +1,4 @@
 package se.moeser.javacleanscaffold.application.usecase.exception;
 
-public class UserNotFoundException extends UseCaseException {
+public class EmailExistsException extends UseCaseException {
 }

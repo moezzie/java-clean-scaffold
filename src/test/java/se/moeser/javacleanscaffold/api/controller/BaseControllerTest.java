@@ -40,17 +40,6 @@ public abstract class BaseControllerTest {
         return new TestRestTemplate(builder);
     }
 
-    protected JSONObject getRequest(String endpoint) throws JSONException, IOException, InterruptedException {
-        URI uri = URI.create(this.testUrl() + endpoint);
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(uri)
-                .header("Content-Type", "application/json; charset=UTF-8")
-                .build();
-
-        return this.jsonRequest(request);
-    }
-
     protected JSONObject postRequest(String endpoint, JSONObject data) throws JSONException, IOException, InterruptedException {
         URI uri = URI.create(this.testUrl() + endpoint);
 

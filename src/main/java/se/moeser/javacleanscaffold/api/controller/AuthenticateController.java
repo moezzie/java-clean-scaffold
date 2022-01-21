@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import se.moeser.javacleanscaffold.api.auth.ApiUserPrincipal;
 import se.moeser.javacleanscaffold.api.auth.JwtTokenUtil;
 import se.moeser.javacleanscaffold.api.dto.AuthenticationRequest;
 import se.moeser.javacleanscaffold.api.dto.AuthenticationResponse;
@@ -38,10 +39,11 @@ public class AuthenticateController {
             throw new ApiException("Incorrect username or password", e, HttpStatus.UNAUTHORIZED);
         }
 
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(request.getUsername());
+        ApiUserPrincipal userDetails = (ApiUserPrincipal) this.userDetailsService.loadUserByUsername(request.getUsername());
         String token = this.jwtTokenUtil.generateToken(userDetails);
 
-        AuthenticationResponse response = new AuthenticationResponse(token);
+
+        AuthenticationResponse response = new AuthenticationResponse(userDetails.getId(), token);
 
         return ResponseEntity.ok(response);
     }

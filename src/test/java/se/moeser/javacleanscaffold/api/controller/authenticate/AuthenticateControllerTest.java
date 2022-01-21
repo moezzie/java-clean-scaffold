@@ -13,6 +13,7 @@ import se.moeser.javacleanscaffold.api.controller.BaseControllerTest;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserRequest;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserResponse;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserResponseInterface;
+import se.moeser.javacleanscaffold.helper.SharedTestHelper;
 import se.moeser.javacleanscaffold.helper.UserTestHelper;
 
 import java.io.IOException;
@@ -43,8 +44,11 @@ public class AuthenticateControllerTest extends BaseControllerTest {
 
         UserTestHelper.createUser(this.testUrl(), email, username, password);
 
-        JSONObject actual = this.authenticateUser(email, password);
+        // JSONObject actual = this.authenticateUser(email, password);
+        JSONObject actual = UserTestHelper.authenticateUser(this.testUrl(), username, password);
 
+        Assertions.assertTrue(actual.has("id"));
+        Assertions.assertNotNull(actual.getString("id"));
         Assertions.assertTrue(actual.has("token"));
         Assertions.assertNotNull(actual.getString("token"));
     }
@@ -56,6 +60,7 @@ public class AuthenticateControllerTest extends BaseControllerTest {
         body.put("username", username);
         body.put("password", password);
 
-        return this.postRequest(endpoint, body);
+        return SharedTestHelper.postRequest(this.testUrl(), endpoint, body);
+        //return this.postRequest(endpoint, body);
     }
 }

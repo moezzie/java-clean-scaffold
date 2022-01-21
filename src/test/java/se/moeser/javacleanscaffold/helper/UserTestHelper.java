@@ -1,27 +1,49 @@
 package se.moeser.javacleanscaffold.helper;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserRequest;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserResponse;
-import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserResponseInterface;
+
+import java.io.IOException;
+
 
 public class UserTestHelper {
     public static CreateUserResponse createUser(String host, String email, String username, String password) {
 
-        String ENDPOINT = host + "/user";
+        String endpoint = host + "/user";
 
         CreateUserRequest dto = new CreateUserRequest(email, username, password);
         HttpEntity body = new HttpEntity(dto);
+
         RestTemplateBuilder builder = new RestTemplateBuilder().rootUri(host);
         TestRestTemplate restTemplate = new TestRestTemplate(builder);
 
-        ResponseEntity<CreateUserResponse> response = restTemplate.postForEntity(ENDPOINT, body, CreateUserResponse.class);
+        ResponseEntity<CreateUserResponse> response = restTemplate.postForEntity(endpoint, body, CreateUserResponse.class);
 
         return response.getBody();
     }
+
+    public static JSONObject authenticateUser(String host, String username, String password) throws JSONException, IOException, InterruptedException {
+        String endpoint = "/user/authenticate";
+
+        JSONObject credentials = new JSONObject();
+        credentials.put("username", username);
+        credentials.put("password", password);
+
+        return SharedTestHelper.postRequest(host, endpoint, credentials);
+    }
+
+    public static JSONObject createAndAuthenticateUser(String host, String email, String username, String password) throws JSONException, IOException, InterruptedException {
+        UserTestHelper.createUser(host, email, username, password);
+
+        JSONObject response = UserTestHelper.authenticateUser(host, email, password);
+        return response;
+    }
+
 
 }

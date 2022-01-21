@@ -20,6 +20,7 @@ import se.moeser.javacleanscaffold.domain.exception.InvalidEmailException;
 import se.moeser.javacleanscaffold.domain.exception.InvalidPasswordException;
 import se.moeser.javacleanscaffold.domain.exception.InvalidUsernameException;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserRequest;
+import se.moeser.javacleanscaffold.helper.SharedTestHelper;
 import se.moeser.javacleanscaffold.helper.UserTestHelper;
 
 import java.io.IOException;
@@ -53,22 +54,22 @@ public class UserControllerTest extends BaseControllerTest {
 
     @Test
     public void TestGetUser() throws JSONException, IOException, InterruptedException {
-        String email = "user2@localhost.local";
-        String username = "user2";
-        String password = "Password2!";
+        String email = "user8@localhost.local";
+        String username = "user8";
+        String password = "Password8!";
 
-        // Create a new user
-        ResponseEntity<CreateUserResponse> createUserResponse = this.createUser(email, username, password);
-        long userId = createUserResponse.getBody().getId();
+        JSONObject session = UserTestHelper.createAndAuthenticateUser(this.testUrl(), email, username, password);
+        long userId = session.getLong("id");
 
-        String endpoint = "/user/" + createUserResponse.getBody().getId();
+
+        String endpoint = "/user/" + userId;
 
         JSONObject expected = new JSONObject();
         expected.put("id", userId);
-        expected.put("email",email);
+        expected.put("email", email);
         expected.put("username", username);
 
-        JSONObject actual = this.getRequest(endpoint);
+        JSONObject actual = SharedTestHelper.getRequestAuthenticated(this.testUrl(), endpoint, session.getString("token"));
 
         JSONAssert.assertEquals(expected, actual,true);
 
@@ -78,14 +79,21 @@ public class UserControllerTest extends BaseControllerTest {
 
     @Test
     public void TestGetInvalidUser() throws IOException, InterruptedException, JSONException {
-        // Request GET /user/{id}
+
+        String email = "user3@localhost.local";
+        String username = "user3";
+        String password = "Password3!";
+
+        JSONObject session = UserTestHelper.createAndAuthenticateUser(this.testUrl(), email, username, password);
+
+        // Request GET /user/{id} - 999 User does not exist
         String endpoint = "/user/999";
 
-        JSONObject actual = this.getRequest(endpoint);
+        JSONObject actual = SharedTestHelper.getRequestAuthenticated(this.testUrl(), endpoint, session.getString("token"));
 
         JSONObject expected = new JSONObject();
-        expected.put("message", "User not found");
-        expected.put("status", "BAD_REQUEST");
+        expected.put("message", "Forbidden");
+        expected.put("status", "FORBIDDEN");
 
         JSONAssert.assertEquals(actual, expected, true);
     }

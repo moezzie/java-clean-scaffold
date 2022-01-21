@@ -101,6 +101,39 @@ public class UserControllerTest extends BaseControllerTest {
         JSONAssert.assertEquals(actual, expected, true);
     }
 
+    @Test
+    public void TestUsernamneAlreadyInUse() throws JSONException, IOException, InterruptedException {
+        String email = "user27@localhost.local";
+        String username = "user27";
+        String password = "Password27!";
+
+        UserTestHelper.createUser(this.testUrl(), email, username, password);
+        JSONObject actual = UserTestHelper.createUser(this.testUrl(), email, username, password);
+
+        JSONObject expected = new JSONObject();
+        expected.put("message","Username already exists");
+        expected.put("status","BAD_REQUEST");
+
+        JSONAssert.assertEquals(expected, actual,true);
+    }
+
+
+    @Test
+    public void TestEmailAlreadyInUse() throws JSONException, IOException, InterruptedException {
+        String email = "user37@localhost.local";
+        String username = "user37";
+        String password = "Password37!";
+
+        UserTestHelper.createUser(this.testUrl(), email, username, password);
+        JSONObject actual = UserTestHelper.createUser(this.testUrl(), email, username + "x", password);
+
+        JSONObject expected = new JSONObject();
+        expected.put("message","Email already exists");
+        expected.put("status","BAD_REQUEST");
+
+        JSONAssert.assertEquals(expected, actual,true);
+    }
+
     private ResponseEntity<CreateUserResponse> createUser(String email, String username, String password) {
 
         String ENDPOINT = this.testUrl() + "/user";

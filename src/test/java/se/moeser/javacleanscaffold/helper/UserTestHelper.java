@@ -13,19 +13,16 @@ import java.io.IOException;
 
 
 public class UserTestHelper {
-    public static CreateUserResponse createUser(String host, String email, String username, String password) {
 
-        String endpoint = host + "/user";
+    public static JSONObject createUser(String host, String email, String username, String password) throws JSONException, IOException, InterruptedException {
+        String endpoint = "/user";
 
-        CreateUserRequest dto = new CreateUserRequest(email, username, password);
-        HttpEntity body = new HttpEntity(dto);
+        JSONObject body = new JSONObject();
+        body.put("email", email);
+        body.put("username", username);
+        body.put("password", password);
 
-        RestTemplateBuilder builder = new RestTemplateBuilder().rootUri(host);
-        TestRestTemplate restTemplate = new TestRestTemplate(builder);
-
-        ResponseEntity<CreateUserResponse> response = restTemplate.postForEntity(endpoint, body, CreateUserResponse.class);
-
-        return response.getBody();
+        return SharedTestHelper.postRequest(host, endpoint, body);
     }
 
     public static JSONObject authenticateUser(String host, String username, String password) throws JSONException, IOException, InterruptedException {

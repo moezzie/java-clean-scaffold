@@ -2,17 +2,13 @@ package se.moeser.javacleanscaffold.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import se.moeser.javacleanscaffold.api.auth.ApiUserDetailsService;
 import se.moeser.javacleanscaffold.api.auth.ApiUserPrincipal;
 import se.moeser.javacleanscaffold.api.exception.ApiException;
 import se.moeser.javacleanscaffold.application.usecase.exception.UseCaseException;
-import se.moeser.javacleanscaffold.application.usecase.exception.EmailExistsException;
-import se.moeser.javacleanscaffold.application.usecase.exception.UsernameExistsException;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUser;
 import se.moeser.javacleanscaffold.application.usecase.user.UserRepositoryInterface;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserResponseInterface;
@@ -24,7 +20,6 @@ import se.moeser.javacleanscaffold.domain.exception.InvalidUsernameException;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserRequest;
 import se.moeser.javacleanscaffold.infrastructure.persistence.exception.UserNotFoundException;
 
-import java.security.Principal;
 import java.util.Optional;
 
 @RestController

@@ -1,6 +1,5 @@
 package se.moeser.javacleanscaffold.api.exception;
 
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 
 public class ApiException extends RuntimeException {

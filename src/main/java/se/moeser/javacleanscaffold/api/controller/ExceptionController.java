@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import se.moeser.javacleanscaffold.api.dto.ExceptionDto;
 import se.moeser.javacleanscaffold.api.exception.ApiException;
 
-import javax.persistence.ElementCollection;
-
 /**
  * Exception controller handles all unhandled errors from the API endpoint controller.
  * It gets the exception message and returns its message

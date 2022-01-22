@@ -13,6 +13,9 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import se.moeser.javacleanscaffold.api.controller.BaseControllerTest;
+import se.moeser.javacleanscaffold.application.usecase.exception.EmailExistsException;
+import se.moeser.javacleanscaffold.application.usecase.exception.UseCaseException;
+import se.moeser.javacleanscaffold.application.usecase.exception.UsernameExistsException;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUser;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserResponse;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserResponseInterface;
@@ -20,6 +23,8 @@ import se.moeser.javacleanscaffold.domain.exception.InvalidEmailException;
 import se.moeser.javacleanscaffold.domain.exception.InvalidPasswordException;
 import se.moeser.javacleanscaffold.domain.exception.InvalidUsernameException;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserRequest;
+import se.moeser.javacleanscaffold.helper.SharedTestHelper;
+import se.moeser.javacleanscaffold.helper.UserTestHelper;
 
 import java.io.IOException;
 
@@ -34,7 +39,7 @@ public class UserControllerTest extends BaseControllerTest {
     private CreateUser createUserUsecase;
 
     @BeforeEach
-    public void setup() throws InvalidPasswordException, InvalidUsernameException, InvalidEmailException {
+    public void setup() throws InvalidPasswordException, InvalidUsernameException, InvalidEmailException, UseCaseException {
         CreateUserResponseInterface response = new CreateUserResponse((long) 1);
         when(createUserUsecase.createUser(any())).thenReturn(response);
     }
@@ -42,7 +47,7 @@ public class UserControllerTest extends BaseControllerTest {
     @Test
     public void testCreateUser() {
 
-        ResponseEntity<CreateUserResponse> response = this.createUser("user1@email.com", "user1", "Password1!");
+        ResponseEntity<CreateUserResponse> response = this.createUser("user10@localhost.local", "user10", "Password1!");
 
         int expectedStatus = 200;
         Assertions.assertEquals(expectedStatus, response.getStatusCodeValue());
@@ -52,37 +57,81 @@ public class UserControllerTest extends BaseControllerTest {
 
     @Test
     public void TestGetUser() throws JSONException, IOException, InterruptedException {
-        String email = "user2@email.com";
-        String username = "user2";
-        String password = "Password2!";
+        String email = "user8@localhost.local";
+        String username = "user8";
+        String password = "Password8!";
 
-        // Create a new user
-        ResponseEntity<CreateUserResponse> createUserResponse = this.createUser(email, username, password);
-        long userId = createUserResponse.getBody().getId();
+        JSONObject session = UserTestHelper.createAndAuthenticateUser(this.testUrl(), email, username, password);
+        long userId = session.getLong("id");
 
-        String endpoint = "/user/" + createUserResponse.getBody().getId();
 
-        JSONObject actual = this.getRequest(endpoint);
+        String endpoint = "/user/" + userId;
 
         JSONObject expected = new JSONObject();
         expected.put("id", userId);
-        expected.put("email",email);
+        expected.put("email", email);
         expected.put("username", username);
 
+        JSONObject actual = SharedTestHelper.getRequestAuthenticated(this.testUrl(), endpoint, session.getString("token"));
+
         JSONAssert.assertEquals(expected, actual,true);
+
+        // Make sure output does not include the password
+        Assertions.assertFalse(actual.has("password"));
     }
 
     @Test
     public void TestGetInvalidUser() throws IOException, InterruptedException, JSONException {
-        // Request GET /user/{id}
+
+        String email = "user3@localhost.local";
+        String username = "user3";
+        String password = "Password3!";
+
+        JSONObject session = UserTestHelper.createAndAuthenticateUser(this.testUrl(), email, username, password);
+
+        // Request GET /user/{id} - 999 User does not exist
         String endpoint = "/user/999";
 
-        JSONObject actual = this.getRequest(endpoint);
+        JSONObject actual = SharedTestHelper.getRequestAuthenticated(this.testUrl(), endpoint, session.getString("token"));
 
         JSONObject expected = new JSONObject();
-        expected.put("message", "User not found");
+        expected.put("message", "Forbidden");
+        expected.put("status", "FORBIDDEN");
 
         JSONAssert.assertEquals(actual, expected, true);
+    }
+
+    @Test
+    public void TestUsernamneAlreadyInUse() throws JSONException, IOException, InterruptedException {
+        String email = "user27@localhost.local";
+        String username = "user27";
+        String password = "Password27!";
+
+        UserTestHelper.createUser(this.testUrl(), email, username, password);
+        JSONObject actual = UserTestHelper.createUser(this.testUrl(), email, username, password);
+
+        JSONObject expected = new JSONObject();
+        expected.put("message","Username already exists");
+        expected.put("status","BAD_REQUEST");
+
+        JSONAssert.assertEquals(expected, actual,true);
+    }
+
+
+    @Test
+    public void TestEmailAlreadyInUse() throws JSONException, IOException, InterruptedException {
+        String email = "user37@localhost.local";
+        String username = "user37";
+        String password = "Password37!";
+
+        UserTestHelper.createUser(this.testUrl(), email, username, password);
+        JSONObject actual = UserTestHelper.createUser(this.testUrl(), email, username + "x", password);
+
+        JSONObject expected = new JSONObject();
+        expected.put("message","Email already exists");
+        expected.put("status","BAD_REQUEST");
+
+        JSONAssert.assertEquals(expected, actual,true);
     }
 
     private ResponseEntity<CreateUserResponse> createUser(String email, String username, String password) {

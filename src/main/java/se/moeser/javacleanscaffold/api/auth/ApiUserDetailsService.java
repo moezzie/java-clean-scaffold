@@ -23,16 +23,31 @@ public class ApiUserDetailsService implements UserDetailsService {
 
         AuthenticateUserResponseInterface user = null;
 
-        AuthenticateUserRequest request = new AuthenticateUserRequest(username);
-
         try {
-            user = this.useCase.authenticateUser(request);
+            user = this.useCase.authenticateUser(username);
         } catch (Exception e) {
             // Do nothing
         }
 
         if (user == null) {
             throw new UsernameNotFoundException("Incorrect username or password");
+        }
+
+        return new ApiUserPrincipal(user);
+    }
+
+    public UserDetails loadUserById(long userId) throws UsernameNotFoundException {
+
+        AuthenticateUserResponseInterface user = null;
+
+        try {
+            user = this.useCase.getAuthenticatedUserById(userId);
+        } catch (Exception e) {
+            // Do nothing
+        }
+
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
         }
 
         return new ApiUserPrincipal(user);

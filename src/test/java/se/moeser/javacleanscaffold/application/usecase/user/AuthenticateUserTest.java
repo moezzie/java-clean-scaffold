@@ -24,12 +24,10 @@ public class AuthenticateUserTest {
     @Mock
     private UserRepositoryInterface userRepository;
 
-    private AuthenticateUserRequestInterface requestDto;
+    private String username = "user1";
 
     @BeforeEach
     void setMockOutput() throws InvalidPasswordException, InvalidUsernameException, InvalidEmailException {
-        this.requestDto = new AuthenticateUserRequest("user1");
-
         User user1 =  new User();
         lenient().when(userRepository.getUserByUsername("user1")).thenReturn(user1);
         lenient().when(userRepository.getUserByUsername("no-user")).thenReturn(null);
@@ -38,14 +36,12 @@ public class AuthenticateUserTest {
     @Test
     void TestAuthenticateUser() throws InvalidPasswordException, InvalidUsernameException, InvalidEmailException {
         AuthenticateUser usecase = new AuthenticateUser(this.userRepository);
-        usecase.authenticateUser(this.requestDto);
+        usecase.authenticateUser(this.username);
     }
 
     @Test
     void TestUserNotFound() throws InvalidPasswordException, InvalidUsernameException, InvalidEmailException {
-        this.requestDto = new AuthenticateUserRequest("no-user");
-
         AuthenticateUser usecase = new AuthenticateUser(this.userRepository);
-        usecase.authenticateUser(this.requestDto);
+        usecase.authenticateUser(this.username);
     }
 }

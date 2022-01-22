@@ -5,6 +5,7 @@ import se.moeser.javacleanscaffold.domain.entity.User;
 import se.moeser.javacleanscaffold.domain.exception.InvalidEmailException;
 import se.moeser.javacleanscaffold.domain.exception.InvalidPasswordException;
 import se.moeser.javacleanscaffold.domain.exception.InvalidUsernameException;
+import se.moeser.javacleanscaffold.infrastructure.persistence.exception.UserNotFoundException;
 
 public class AuthenticateUser {
 
@@ -14,9 +15,19 @@ public class AuthenticateUser {
         this.repository = repository;
     }
 
-    public AuthenticateUserResponseInterface authenticateUser(AuthenticateUserRequestInterface request) throws InvalidUsernameException, InvalidEmailException, InvalidPasswordException {
-        String username = request.getUsername();
+    public AuthenticateUserResponseInterface authenticateUser(String username) throws InvalidUsernameException, InvalidEmailException, InvalidPasswordException {
         User user = this.repository.getUserByUsernameOrEmail(username);
+
+        // No matching user found
+        if (user == null) {
+            return null;
+        }
+
+        return new AuthenticateUserResponse(user);
+    }
+
+    public AuthenticateUserResponseInterface getAuthenticatedUserById(long userId) throws InvalidUsernameException, InvalidEmailException, InvalidPasswordException, UserNotFoundException {
+        User user = this.repository.getUserById(userId);
 
         // No matching user found
         if (user == null) {

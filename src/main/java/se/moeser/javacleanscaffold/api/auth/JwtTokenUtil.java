@@ -20,6 +20,13 @@ public class JwtTokenUtil {
     @Value("${app.jwt.lifetime}")
     private int TOKEN_LIFETIME;
 
+    public long extractUserId(String token) {
+       String userIdStr = extractClaim(token, Claims::getSubject);
+
+       long userId = Long.parseLong(userIdStr);
+
+       return userId;
+    }
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -43,10 +50,10 @@ public class JwtTokenUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(ApiUserPrincipal userDetails) {
         Map<String, Object> claims = new HashMap<>();
         // FIXME - add user role to claims
-        return createToken(claims, userDetails.getUsername());
+        return createToken(claims, "" + userDetails.getId());
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
@@ -60,8 +67,8 @@ public class JwtTokenUtil {
                 .compact();
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    public Boolean validateToken(String token, ApiUserPrincipal userDetails) {
+        final long userId = this.extractUserId(token);
+        return userId == userDetails.getId() && !this.isTokenExpired(token);
     }
 }

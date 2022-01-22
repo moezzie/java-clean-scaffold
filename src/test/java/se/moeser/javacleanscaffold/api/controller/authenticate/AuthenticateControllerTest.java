@@ -6,13 +6,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import se.moeser.javacleanscaffold.api.controller.BaseControllerTest;
-import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserRequest;
-import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserResponse;
-import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserResponseInterface;
 import se.moeser.javacleanscaffold.helper.SharedTestHelper;
 import se.moeser.javacleanscaffold.helper.UserTestHelper;
 
@@ -44,7 +39,6 @@ public class AuthenticateControllerTest extends BaseControllerTest {
 
         UserTestHelper.createUser(this.testUrl(), email, username, password);
 
-        // JSONObject actual = this.authenticateUser(email, password);
         JSONObject actual = UserTestHelper.authenticateUser(this.testUrl(), username, password);
 
         Assertions.assertTrue(actual.has("id"));
@@ -61,6 +55,5 @@ public class AuthenticateControllerTest extends BaseControllerTest {
         body.put("password", password);
 
         return SharedTestHelper.postRequest(this.testUrl(), endpoint, body);
-        //return this.postRequest(endpoint, body);
     }
 }

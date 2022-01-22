@@ -36,7 +36,7 @@ Root
 ## Roadmap
 - [x] Clean architecture
 - [x] RESTful API
-- [ ] MySQL implementation
-- [ ] Authentication
-- [ ] JWT
-- [ ] Dockerfile
+- [ ] Connect to MySQL/Postgres
+- [x] Authentication
+- [x] JWT
+- [x] Dockerfile

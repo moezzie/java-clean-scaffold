@@ -20,6 +20,12 @@ public class JwtTokenUtil {
     @Value("${app.jwt.lifetime}")
     private int TOKEN_LIFETIME;
 
+    public JwtTokenUtil() {}
+
+    public JwtTokenUtil(String secretKey) {
+        this.SECRET_KEY = secretKey;
+    }
+
     public long extractUserId(String token) {
        String userIdStr = extractClaim(token, Claims::getSubject);
 

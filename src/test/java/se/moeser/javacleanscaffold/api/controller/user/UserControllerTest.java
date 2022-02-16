@@ -13,9 +13,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import se.moeser.javacleanscaffold.api.controller.BaseControllerTest;
-import se.moeser.javacleanscaffold.application.usecase.exception.EmailExistsException;
 import se.moeser.javacleanscaffold.application.usecase.exception.UseCaseException;
-import se.moeser.javacleanscaffold.application.usecase.exception.UsernameExistsException;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUser;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserResponse;
 import se.moeser.javacleanscaffold.application.usecase.user.createuser.CreateUserResponseInterface;
@@ -46,8 +44,11 @@ public class UserControllerTest extends BaseControllerTest {
 
     @Test
     public void testCreateUser() {
+        String username = "user33";
+        String email = username + "@localhost.local";
+        String password = "Password33!";
 
-        ResponseEntity<CreateUserResponse> response = this.createUser("user10@localhost.local", "user10", "Password1!");
+        ResponseEntity<CreateUserResponse> response = this.createUser(email, username, password);
 
         int expectedStatus = 200;
         Assertions.assertEquals(expectedStatus, response.getStatusCodeValue());
@@ -57,8 +58,8 @@ public class UserControllerTest extends BaseControllerTest {
 
     @Test
     public void TestGetUser() throws JSONException, IOException, InterruptedException {
-        String email = "user8@localhost.local";
         String username = "user8";
+        String email = username + "@localhost.local";
         String password = "Password8!";
 
         JSONObject session = UserTestHelper.createAndAuthenticateUser(this.testUrl(), email, username, password);
@@ -72,7 +73,7 @@ public class UserControllerTest extends BaseControllerTest {
         expected.put("email", email);
         expected.put("username", username);
 
-        JSONObject actual = SharedTestHelper.getRequestAuthenticated(this.testUrl(), endpoint, session.getString("token"));
+        JSONObject actual = SharedTestHelper.authenticatedGetRequest(this.testUrl(), endpoint, session.getString("token"));
 
         JSONAssert.assertEquals(expected, actual,true);
 
@@ -83,8 +84,8 @@ public class UserControllerTest extends BaseControllerTest {
     @Test
     public void TestGetInvalidUser() throws IOException, InterruptedException, JSONException {
 
-        String email = "user3@localhost.local";
-        String username = "user3";
+        String username = "user48";
+        String email = username + "@localhost.local";
         String password = "Password3!";
 
         JSONObject session = UserTestHelper.createAndAuthenticateUser(this.testUrl(), email, username, password);
@@ -92,7 +93,7 @@ public class UserControllerTest extends BaseControllerTest {
         // Request GET /user/{id} - 999 User does not exist
         String endpoint = "/user/999";
 
-        JSONObject actual = SharedTestHelper.getRequestAuthenticated(this.testUrl(), endpoint, session.getString("token"));
+        JSONObject actual = SharedTestHelper.authenticatedGetRequest(this.testUrl(), endpoint, session.getString("token"));
 
         JSONObject expected = new JSONObject();
         expected.put("message", "Forbidden");
@@ -103,8 +104,8 @@ public class UserControllerTest extends BaseControllerTest {
 
     @Test
     public void TestUsernamneAlreadyInUse() throws JSONException, IOException, InterruptedException {
-        String email = "user27@localhost.local";
         String username = "user27";
+        String email = username + "@localhost.local";
         String password = "Password27!";
 
         UserTestHelper.createUser(this.testUrl(), email, username, password);
@@ -120,8 +121,8 @@ public class UserControllerTest extends BaseControllerTest {
 
     @Test
     public void TestEmailAlreadyInUse() throws JSONException, IOException, InterruptedException {
-        String email = "user37@localhost.local";
         String username = "user37";
+        String email = username + "@localhost.local";
         String password = "Password37!";
 
         UserTestHelper.createUser(this.testUrl(), email, username, password);

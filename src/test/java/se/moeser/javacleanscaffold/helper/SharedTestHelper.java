@@ -13,10 +13,10 @@ public class SharedTestHelper {
 
 
     public static JSONObject getRequest(String host, String endpoint) throws JSONException, IOException, InterruptedException {
-        return SharedTestHelper.getRequestAuthenticated(host, endpoint, null);
+        return SharedTestHelper.authenticatedGetRequest(host, endpoint, null);
     }
 
-    public static JSONObject getRequestAuthenticated(String host, String endpoint, String authToken) throws JSONException, IOException, InterruptedException {
+    public static JSONObject authenticatedGetRequest(String host, String endpoint, String authToken) throws JSONException, IOException, InterruptedException {
         URI uri = URI.create(host + endpoint);
 
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
@@ -33,10 +33,10 @@ public class SharedTestHelper {
     }
 
     public static JSONObject postRequest(String host, String endpoint, JSONObject data) throws JSONException, IOException, InterruptedException {
-        return SharedTestHelper.postRequestAuthenticated(host, endpoint, data, null);
+        return SharedTestHelper.authenticatedPostRequest(host, endpoint, data, null);
     }
 
-    public static JSONObject postRequestAuthenticated(String host, String endpoint, JSONObject data, String authToken) throws JSONException, IOException, InterruptedException {
+    public static JSONObject authenticatedPostRequest(String host, String endpoint, JSONObject data, String authToken) throws JSONException, IOException, InterruptedException {
         URI uri = URI.create(host + endpoint);
 
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()

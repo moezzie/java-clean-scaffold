@@ -11,6 +11,7 @@ import se.moeser.javacleanscaffold.api.auth.ApiUserPrincipal;
 import se.moeser.javacleanscaffold.api.auth.JwtTokenUtil;
 import se.moeser.javacleanscaffold.application.usecase.user.authenticate.AuthenticateUserResponse;
 import se.moeser.javacleanscaffold.domain.entity.User;
+import se.moeser.javacleanscaffold.domain.valueobject.Role;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -33,11 +34,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         long userId = 0;
         String jwt = null;
+        String userRole = null;
 
         // Find the user id in the token payload
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
+
             userId = jwtTokenUtil.extractUserId(jwt);
+            userRole = jwtTokenUtil.extractRole(jwt);
         }
 
 
@@ -45,6 +49,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             User user = new User();
             user.setId(userId);
+            user.setRole(new Role(userRole));
 
             // Since the token is signed we can trust the user id from the payload
             // Wrap the user in an AuthenticateUserResponse without checking with the database first

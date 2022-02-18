@@ -9,6 +9,7 @@ import se.moeser.javacleanscaffold.domain.exception.InvalidPasswordException;
 import se.moeser.javacleanscaffold.domain.exception.InvalidUsernameException;
 import se.moeser.javacleanscaffold.domain.valueobject.Email;
 import se.moeser.javacleanscaffold.domain.valueobject.Password;
+import se.moeser.javacleanscaffold.domain.valueobject.Role;
 import se.moeser.javacleanscaffold.domain.valueobject.Username;
 import se.moeser.javacleanscaffold.infrastructure.persistence.dao.UserDao;
 import se.moeser.javacleanscaffold.infrastructure.persistence.dto.UserDto;
@@ -80,6 +81,7 @@ public class UserRepository implements UserRepositoryInterface {
         user.setEmail(new Email(dto.getEmail()));
         user.setUsername(new Username(dto.getUsername()));
         user.setPassword(new Password(dto.getPassword()));
+        user.setRole(new Role((dto.getRole())));
 
         return user;
     }

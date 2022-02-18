@@ -2,6 +2,7 @@ package se.moeser.javacleanscaffold.domain.entity;
 
 import se.moeser.javacleanscaffold.domain.valueobject.Email;
 import se.moeser.javacleanscaffold.domain.valueobject.Password;
+import se.moeser.javacleanscaffold.domain.valueobject.Role;
 import se.moeser.javacleanscaffold.domain.valueobject.Username;
 
 public class User {
@@ -10,18 +11,29 @@ public class User {
     private Email email;
     private Username username;
     private Password password;
+    private Role role;
+
+    public User(long id, Email email, Username username, Password password, Role role) {
+        this.id = id;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
 
     public User(long id, Email email, Username username, Password password) {
         this.id = id;
         this.email = email;
         this.username = username;
         this.password = password;
+        this.role = new Role(Role.USER);
     }
 
     public User(long id, Email email, Username username) {
         this.id = id;
         this.email = email;
         this.username = username;
+        this.role = new Role("ROLE_USER");
     }
 
     public User() {}
@@ -56,5 +68,13 @@ public class User {
 
     public void setPassword(Password password) {
         this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

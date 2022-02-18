@@ -5,4 +5,5 @@ public interface AuthenticateUserResponseInterface {
     public String getEmail();
     public String getUsername();
     public String getPassword();
+    public String getRole();
 }

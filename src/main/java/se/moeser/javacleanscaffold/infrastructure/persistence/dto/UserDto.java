@@ -26,6 +26,9 @@ public class UserDto {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "role", nullable = false)
+    private String role;
+
     public UserDto() {}
 
     public UserDto(User user) {
@@ -35,6 +38,7 @@ public class UserDto {
         this.email = user.getEmail().toString();
         this.username = user.getUsername().toString();
         this.password = user.getPassword().toString();
+        this.role = user.getRole().toString();
     }
 
 
@@ -69,6 +73,10 @@ public class UserDto {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getRole() { return this.role; }
+
+    public void setRole(String role) { this.role = role; }
 
     public User getDomainEntity() throws InvalidUsernameException, InvalidEmailException {
         long id = this.getId();

@@ -29,4 +29,11 @@ public class AuthenticateUserResponse implements AuthenticateUserResponseInterfa
     public String getPassword() {
         return this.user.getPassword().toString();
     }
+
+    @Override
+    public String getRole() {
+        return this.user.getRole().toString();
+    }
+
+
 }

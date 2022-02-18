@@ -5,8 +5,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import se.moeser.javacleanscaffold.application.usecase.user.authenticate.AuthenticateUserResponseInterface;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 public class ApiUserPrincipal implements UserDetails {
 
@@ -19,7 +18,14 @@ public class ApiUserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority("USER"));
+        List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
+        list.add(new SimpleGrantedAuthority(this.user.getRole()));
+
+        return list;
+    }
+
+    public boolean hasRole(String role) {
+        return this.getAuthorities().contains(role);
     }
 
     @Override
@@ -34,6 +40,10 @@ public class ApiUserPrincipal implements UserDetails {
 
     public long getId() {
         return this.user.getId();
+    }
+
+    public String getRole() {
+        return this.user.getRole();
     }
 
     @Override

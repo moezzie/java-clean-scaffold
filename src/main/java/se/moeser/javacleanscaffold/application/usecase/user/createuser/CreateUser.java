@@ -10,6 +10,7 @@ import se.moeser.javacleanscaffold.domain.exception.InvalidPasswordException;
 import se.moeser.javacleanscaffold.domain.exception.InvalidUsernameException;
 import se.moeser.javacleanscaffold.domain.valueobject.Email;
 import se.moeser.javacleanscaffold.domain.valueobject.Password;
+import se.moeser.javacleanscaffold.domain.valueobject.Role;
 import se.moeser.javacleanscaffold.domain.valueobject.Username;
 
 public class CreateUser {
@@ -24,6 +25,7 @@ public class CreateUser {
         Email email = new Email(dto.getEmail());
         Username username = new Username(dto.getUsername());
         Password password = new Password(dto.getPassword());
+        Role role = new Role(Role.USER);
 
         if (usernameExists(dto.getUsername())) {
             throw new UsernameExistsException();
@@ -33,7 +35,7 @@ public class CreateUser {
             throw new EmailExistsException();
         }
 
-        User user = new User(-1, email, username, password);
+        User user = new User(-1, email, username, password, role);
 
         long userId =  this.repository.createUser(user);
 

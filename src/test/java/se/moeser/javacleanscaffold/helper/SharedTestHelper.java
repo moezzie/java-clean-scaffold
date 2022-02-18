@@ -60,6 +60,14 @@ public class SharedTestHelper {
         HttpResponse<String> response = null;
 
         response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        String responseBody = response.body();
+
+        // On empty response
+        if (responseBody.isEmpty()) {
+            return new JSONObject();
+        }
+
         return new JSONObject(response.body());
     }
 }

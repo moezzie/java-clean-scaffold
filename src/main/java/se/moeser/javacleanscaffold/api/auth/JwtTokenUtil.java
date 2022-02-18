@@ -33,6 +33,14 @@ public class JwtTokenUtil {
 
        return userId;
     }
+
+    public String extractRole(String token) {
+        Claims claims = this.extractAllClaims(token);
+
+        String role = (String)claims.get("role");
+        return role;
+    }
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -58,7 +66,9 @@ public class JwtTokenUtil {
 
     public String generateToken(ApiUserPrincipal userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        // FIXME - add user role to claims
+
+        claims.put("role", userDetails.getRole());
+
         return createToken(claims, "" + userDetails.getId());
     }
 

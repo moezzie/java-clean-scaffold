@@ -36,7 +36,7 @@ public class UserTestHelper {
     }
 
     public static JSONObject createAndAuthenticateUser(String host, String email, String username, String password) throws JSONException, IOException, InterruptedException {
-        UserTestHelper.createUser(host, email, username, password);
+        JSONObject user = UserTestHelper.createUser(host, email, username, password);
 
         JSONObject response = UserTestHelper.authenticateUser(host, email, password);
         return response;

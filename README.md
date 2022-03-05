@@ -13,6 +13,30 @@ The domain and application layer which holds all the business logic should be ab
 
 This project is meant to be a starting point for future projects in order to quickly get up and running.
 
+### Getting started
+The quickest way to start the application is using docker-compose.  
+This starts the application including a Postgres database.
+
+#### Configuration
+The application uses a .env file to pass configurations to the docker containers and the application inside.  
+If you would like configure anything, create a .env file from the env-sample file.
+```shell
+# Create an .env-file
+cp env-sample .env
+```
+
+Change any values you like in the .env-file.
+
+
+#### Start application in production mode (uses default config values)
+```shell
+docker-compose up
+```
+
+
+
+
+
 ### Structure
 ```
 Root
@@ -36,7 +60,7 @@ Root
 ## Roadmap
 - [x] Clean architecture
 - [x] RESTful API
-- [ ] Connect to MySQL/Postgres
+- [x] Connect to Postgres
 - [x] Authentication
 - [x] JWT
 - [x] Dockerfile

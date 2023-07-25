@@ -1,0 +1,40 @@
+version: "3.8"
+services:
+  app:
+    build:
+      dockerfile: ./Dockerfile
+      context: ./
+
+    ports:
+      - "8080:8080"
+
+    volumes:
+      - "./src/main/resources/:/app/resources/"
+
+    env_file:
+      .env
+
+    environment:
+      - APP_ACTIVE_PROFILE=${APP_ACTIVE_PROFILE:-default}
+      - APP_DEBUG=${APP_DEBUG:-false}
+      - APP_JWT_SECRET=${APP_JWT_SECRET:-changeme}
+      - APP_JWT_LIFETIME=${APP_JWT_LIFETIME:-86400}
+      - DB_HOST=${DB_HOST:-db}
+      - DB_PORT=${DB_PORT:-5432}
+      - DB_USER=${DB_USER:-dbuser}
+      - DB_PASSWORD=${DB_PASSWORD:-dbpassword}
+      - DB_NAME=${DB_NAME:-app}
+
+  db:
+    image: postgres:latest
+
+    ports:
+      - "54322:5432"
+
+    env_file:
+      .env
+
+    environment:
+      - POSTGRES_USER=${DB_USER:-dbuser}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-dbpassword}
+      - POSTGRES_DB=${DB_NAME:-app}

@@ -57,7 +57,7 @@ public class UserControllerTest extends BaseControllerTest {
     }
 
     @Test
-    public void TestGetUser() throws JSONException, IOException, InterruptedException {
+    public void testGetUser() throws JSONException, IOException, InterruptedException {
         String username = "user8";
         String email = username + "@localhost.local";
         String password = "Password8!";
@@ -82,7 +82,7 @@ public class UserControllerTest extends BaseControllerTest {
     }
 
     @Test
-    public void TestGetInvalidUser() throws IOException, InterruptedException, JSONException {
+    public void testGetInvalidUser() throws IOException, InterruptedException, JSONException {
 
         String username = "user48";
         String email = username + "@localhost.local";
@@ -99,11 +99,11 @@ public class UserControllerTest extends BaseControllerTest {
         expected.put("message", "Forbidden");
         expected.put("status", "FORBIDDEN");
 
-        JSONAssert.assertEquals(actual, expected, true);
+        JSONAssert.assertEquals(expected, actual, true);
     }
 
     @Test
-    public void TestUsernamneAlreadyInUse() throws JSONException, IOException, InterruptedException {
+    public void testUsernamneAlreadyInUse() throws JSONException, IOException, InterruptedException {
         String username = "user27";
         String email = username + "@localhost.local";
         String password = "Password27!";
@@ -120,7 +120,7 @@ public class UserControllerTest extends BaseControllerTest {
 
 
     @Test
-    public void TestEmailAlreadyInUse() throws JSONException, IOException, InterruptedException {
+    public void testEmailAlreadyInUse() throws JSONException, IOException, InterruptedException {
         String username = "user37";
         String email = username + "@localhost.local";
         String password = "Password37!";

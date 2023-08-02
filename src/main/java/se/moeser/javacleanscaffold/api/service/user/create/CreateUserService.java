@@ -1,5 +1,6 @@
-package se.moeser.javacleanscaffold.api.service.user;
+package se.moeser.javacleanscaffold.api.service.user.create;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import se.moeser.javacleanscaffold.api.exception.ApiException;
@@ -17,10 +18,12 @@ public class CreateUserService {
 
     private final UserRepositoryInterface userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ApplicationContext applicationContext;
 
-    public CreateUserService(UserRepositoryInterface userRepository, PasswordEncoder passwordEncoder) {
+    public CreateUserService(UserRepositoryInterface userRepository, PasswordEncoder passwordEncoder, ApplicationContext applicationContext) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.applicationContext = applicationContext;
     }
 
     public CreateUserResponseInterface createUser(CreateUserRequest dto) throws InvalidPasswordException, InvalidUsernameException, InvalidEmailException {
@@ -32,10 +35,23 @@ public class CreateUserService {
         CreateUserResponseInterface response;
         try {
             response = usecase.createUser(dto);
+            executeCallback(response);
         } catch (UseCaseException e) {
             throw new ApiException(e.getMessage(), e);
         }
 
         return response;
+    }
+
+    /**
+     * If bean which implements CreateUserCallback exists in IoC container
+     * execute it.
+     * @param user Domain entity User
+     */
+    private void executeCallback(CreateUserResponseInterface user) {
+        if (applicationContext.containsBeanDefinition(CreateUserCallback.class.getName())) {
+            CreateUserCallback bean = applicationContext.getBean(CreateUserCallback.class);
+            bean.execute(user);
+        }
     }
 }

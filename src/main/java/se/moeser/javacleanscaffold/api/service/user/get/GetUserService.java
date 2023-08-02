@@ -1,4 +1,4 @@
-package se.moeser.javacleanscaffold.api.service.user;
+package se.moeser.javacleanscaffold.api.service.user.get;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

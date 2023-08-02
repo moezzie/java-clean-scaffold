@@ -1,5 +1,6 @@
 package se.moeser.javacleanscaffold.api.service.user.create;
 
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -49,9 +50,14 @@ public class CreateUserService {
      * @param user Domain entity User
      */
     private void executeCallback(CreateUserResponseInterface user) {
-        if (applicationContext.containsBeanDefinition(CreateUserCallback.class.getName())) {
-            CreateUserCallback bean = applicationContext.getBean(CreateUserCallback.class);
-            bean.execute(user);
+        CreateUserCallback bean = null;
+        try {
+            bean = applicationContext.getBean(CreateUserCallback.class);
+        } catch (NoSuchBeanDefinitionException e) {
+            // No bean of type CreateUserCallback is registered
+            return;
         }
+
+        bean.execute(user);
     }
 }
